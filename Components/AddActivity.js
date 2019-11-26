@@ -1,5 +1,4 @@
 import * as React from 'react';
-import SwitchHeader from "./SwitchHeader";
 import {
    AsyncStorage,
    Dimensions, Keyboard,
@@ -13,6 +12,7 @@ import {
 import {TextInput, Button} from "react-native-paper";
 import Icon from "react-native-vector-icons/AntDesign";
 import DateCalendar from "./DateCalendar";
+import AddFitnessHeader from "./AddFitnessHeader";
 
 class AddActivity extends React.Component {
    constructor(props) {
@@ -38,18 +38,14 @@ class AddActivity extends React.Component {
    };
 
    getAddResponse = (responseData) => {
-      let errorString = "(builtins.ValueError)";
-      if (responseData == null || responseData <= 0) {
+      if (responseData == null || responseData.length <= 0) {
          return "";
       } else {
-         if(responseData[Object.keys(responseData)[0]] === "Activity created!") {
-            alert(responseData[Object.keys(responseData)[0]]);
+         if(responseData[Object.keys(responseData)[1]] === "Activity created!") {
+            alert(responseData[Object.keys(responseData)[1]]);
             this.setState({activityName:''});
             this.setState({duration:''});
             this.setState({calories:''});
-         }
-         else if(responseData[Object.keys(responseData)[0]].substring(0, errorString.length) === "(builtins.ValueError)") {
-            alert("Duration and Calories can only accept numeric values");
          }
          else {
             alert("Error while Adding");
@@ -68,28 +64,32 @@ class AddActivity extends React.Component {
       if (this.state.duration === '') {
          this.setState({duration:'0'});
       }
-      let defaultUrl = 'https://mysqlcs639.cs.wisc.edu/';
-      defaultUrl = defaultUrl +'activities/';
-      await fetch(defaultUrl, {
-         method: 'POST',
-         headers: {
-            'Accept': 'application/json',
-            'Content-Type': 'application/json',
-            'x-access-token': token
-         },
-         body: JSON.stringify({
-            name: this.state.activityName,
-            date: this.state.activityDate,
-            calories: this.state.calories,
-            duration:this.state.duration
+      if (isNaN(this.state.duration) === false && isNaN(this.state.calories) === false) {
+         let defaultUrl = 'https://mysqlcs639.cs.wisc.edu/';
+         defaultUrl = defaultUrl +'activities/';
+         await fetch(defaultUrl, {
+            method: 'POST',
+            headers: {
+               'Accept': 'application/json',
+               'Content-Type': 'application/json',
+               'x-access-token': token
+            },
+            body: JSON.stringify({
+               name: this.state.activityName,
+               date: this.state.activityDate,
+               calories: this.state.calories,
+               duration:this.state.duration
+            })
          })
-      })
-         .then((response) => response.json())
-         .then((responseData) => {
-            this.getAddResponse(responseData);
-         })
-         .done();
-
+            .then((response) => response.json())
+            .then((responseData) => {
+               console.log(responseData);
+               this.getAddResponse(responseData);
+            })
+            .done();
+      } else {
+         alert("Duration and Calories can only accept numeric values");
+      }
    }
 
 
@@ -108,7 +108,7 @@ class AddActivity extends React.Component {
    render () {
       return (
          <>
-            <SwitchHeader title={"Add Activity"}/>
+            <AddFitnessHeader title={"Add Activity"} navigation={this.props.navigation}/>
                      <View style={{flex: 1, flexDirection: 'column', backgroundColor: 'whitesmoke'}}>
                         <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
                            <KeyboardAvoidingView behavior={this.state.behavior} style={styles.container}>

@@ -15,7 +15,6 @@ export default class DateCalendar extends Component {
    };
 
    componentDidMount() {
-      console.log(this.props.date);
       if(this.props.date !== undefined) {
          this.setState({date:this.props.date})
       } else {

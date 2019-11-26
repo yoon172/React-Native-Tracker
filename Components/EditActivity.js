@@ -1,5 +1,5 @@
 import * as React from 'react';
-import SwitchHeader from "./SwitchHeader";
+import SwitchHeader from "./AddFitnessHeader";
 import {
    AsyncStorage,
    Dimensions, Keyboard,
@@ -57,7 +57,7 @@ class EditActivity extends React.Component {
             alert(responseData[Object.keys(responseData)[0]]);
          }
          else if(responseData[Object.keys(responseData)[0]].substring(0, errorString.length) === "(builtins.ValueError)") {
-            alert("Duration and Calories can only accept numeric values");
+
          }
          else {
             alert("Error while Adding");
@@ -74,29 +74,32 @@ class EditActivity extends React.Component {
       if (this.state.duration === '') {
          this.setState({duration:'0'});
       }
-      let defaultUrl = 'https://mysqlcs639.cs.wisc.edu/';
-      defaultUrl = defaultUrl +'activities/' + this.state.id;
-      await fetch(defaultUrl, {
-         method: 'PUT',
-         headers: {
-            'Accept': 'application/json',
-            'Content-Type': 'application/json',
-            'x-access-token': this.state.token
-         },
-         body: JSON.stringify({
-            name: this.state.activityName,
-            date: this.state.activityDate,
-            calories: this.state.calories,
-            duration:this.state.duration
+      if (isNaN(this.state.duration) === false && isNaN(this.state.calories) === false) {
+         let defaultUrl = 'https://mysqlcs639.cs.wisc.edu/';
+         defaultUrl = defaultUrl + 'activities/' + this.state.id;
+         await fetch(defaultUrl, {
+            method: 'PUT',
+            headers: {
+               'Accept': 'application/json',
+               'Content-Type': 'application/json',
+               'x-access-token': this.state.token
+            },
+            body: JSON.stringify({
+               name: this.state.activityName,
+               date: this.state.activityDate,
+               calories: this.state.calories,
+               duration: this.state.duration
+            })
          })
-      })
-         .then((response) => response.json())
-         .then((responseData) => {
-            console.log(responseData);
-            this.getEditResponse(responseData);
-         })
-         .done();
-
+            .then((response) => response.json())
+            .then((responseData) => {
+               console.log(responseData);
+               this.getEditResponse(responseData);
+            })
+            .done();
+      } else {
+         alert("Duration and Calories can only accept numeric values");
+      }
    }
 
 

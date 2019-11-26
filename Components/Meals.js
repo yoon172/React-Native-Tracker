@@ -1,21 +1,22 @@
 import * as React from 'react';
-import {Avatar, Button, FAB} from 'react-native-paper';
+import User from "./User";
 import Header from "./Header";
 import {AsyncStorage, KeyboardAvoidingView, SafeAreaView, ScrollView, StyleSheet, View} from "react-native";
-import ActivityCard from "./ActivityCard";
+import {FAB} from "react-native-paper";
+import MealCard from "./MealCard";
 
-class Fitness extends React.Component {
+class Meals extends React.Component {
    constructor(props) {
       super(props);
       this.state = {
          behavior: 'padding',
-         activities : [],
+         meals : [],
          token : ''
       };
    }
 
-   async deleteActivity(id) {
-      let defaultUrl = 'https://mysqlcs639.cs.wisc.edu/activities/';
+   async deleteMeal(id) {
+      let defaultUrl = 'https://mysqlcs639.cs.wisc.edu/meals/';
       defaultUrl = defaultUrl + id;
       await fetch(defaultUrl, {
          method: 'DELETE',
@@ -30,9 +31,8 @@ class Fitness extends React.Component {
             console.log(responseData);
          })
          .done();
-         await this.updateAPI().then();
+      await this.updateAPI().then();
    }
-
 
    getData = async (key) => {
       try {
@@ -53,12 +53,11 @@ class Fitness extends React.Component {
 
    makeCards () {
       let cardArr = [];
-      for (let i = 0; i < this.state.activities.length; i++) {
-         let dateString = this.state.activities[i].date;
+      for (let i = 0; i < this.state.meals.length; i++) {
+         let dateString = this.state.meals[i].date;
          let T_location = dateString.indexOf('T');
          let date = dateString.substring(0,T_location);
-         let time = dateString.substring(T_location+1, T_location+8);
-         cardArr.push(<ActivityCard navigation={this.props.navigation} key = {i} id={this.state.activities[i].id} name={this.state.activities[i].name} date={date} duration={this.state.activities[i].duration} calories={this.state.activities[i].calories} deleteActivity = {(data) => this.deleteActivity(data)}/>);
+         cardArr.push(<MealCard navigation={this.props.navigation} key = {i} id={this.state.meals[i].id} name={this.state.meals[i].name} date={date} deleteMeal = {(data) => this.deleteMeal(data)}/>);
       }
       return cardArr;
    }
@@ -67,7 +66,7 @@ class Fitness extends React.Component {
       await this.getData("token");
       let token = this.state.token;
       let defaultUrl = 'https://mysqlcs639.cs.wisc.edu/';
-      defaultUrl = defaultUrl +'activities/';
+      defaultUrl = defaultUrl +'meals/';
       await fetch(defaultUrl, {
          method: 'GET',
          headers: {
@@ -81,7 +80,7 @@ class Fitness extends React.Component {
             this.handleObject(responseData);
          })
          .done();
-      }
+   }
 
 
    componentDidMount() {
@@ -98,10 +97,11 @@ class Fitness extends React.Component {
       this.focusListener.remove();
    }
 
+
    render () {
       return (
          <>
-            <Header navigation={this.props.navigation} title={"Fitness Tracking"}/>
+            <Header navigation={this.props.navigation} title={"Meals Tracking"}/>
             <KeyboardAvoidingView behavior={this.state.behavior} style={styles.container}>
                <SafeAreaView style={styles.container}>
                   <ScrollView style={styles.scrollView}>
@@ -115,26 +115,16 @@ class Fitness extends React.Component {
                color={"purple"}
                size={50}
                style ={styles.addButton}
-               onPress = {() => this.props.navigation.navigate('AddActivity')}
+               onPress = {() => this.props.navigation.navigate('AddMeal')}
             />
 
-            </>
+         </>
       )
    }
+
 }
 
-
 const styles = StyleSheet.create({
-   title: {
-      fontSize: 20,
-      fontWeight: 'bold',
-      marginTop: 20
-   },
-   subTitle: {
-      fontSize: 17,
-      fontWeight: 'bold',
-      marginBottom: 25
-   },
    container: {
       flex: 1,
       justifyContent: 'center',
@@ -148,5 +138,4 @@ const styles = StyleSheet.create({
       right: 15
    }
 });
-
-export default Fitness;
+export default Meals;

@@ -30,10 +30,10 @@ class ActivityCard extends React.Component {
                <Card.Cover source={{ uri: 'https://picsum.photos/700' }} />
 */}
                <Card.Actions>
-                  <Button icon="pencil-outline"  onPress = {() => this.props.navigation.navigate('EditActivity',{id : this.props.id, name:this.props.name, calories:this.props.calories, duration:this.props.duration, date: this.props.date})}>Edit</Button>
                   <Button icon="delete" onPress={() =>this.delete()}>
                      Delete
                   </Button>
+                  <Button icon="pencil-outline"  onPress = {() => this.props.navigation.navigate('EditActivity',{id : this.props.id, name:this.props.name, calories:this.props.calories, duration:this.props.duration, date: this.props.date})}>Edit Activity</Button>
                </Card.Actions>
             </Card>
             </>

@@ -114,7 +114,29 @@ class User extends React.Component {
       }
    };
 
-
+   checkForNumericValues () {
+      if (isNaN(this.state.goalDailyActivity)) {
+         alert('Activity goal only accepts numerical values');
+         return false;
+      }
+      if (isNaN(this.state.goalDailyCalories)) {
+         alert('Daily calorie goal only accepts numerical values');
+         return false;
+      }
+      if (isNaN(this.state.goalDailyFat)) {
+         alert('Daily fat goal only accepts numerical values');
+         return false;
+      }
+      if (isNaN(this.state.goalDailyProtein)) {
+         alert('Daily protein goal only accepts numerical values');
+         return false;
+      }
+      if (isNaN(this.state.goalDailyCarbohydrates)) {
+         alert('Daily carbohydrates goal only accepts numerical values');
+         return false;
+      }
+      return true;
+   }
 
    async editAttempt() {
       let token = this.state.token;
@@ -146,41 +168,40 @@ class User extends React.Component {
             console.log("");
          });
       }
-      await fetch(defaultUrl, {
-         method: 'PUT',
-         headers: {
-            'Accept': 'application/json',
-            'Content-Type': 'application/json',
-            'x-access-token': token
-         },
-         body: JSON.stringify({
-            firstName: this.state.firstName,
-            lastName: this.state.lastName,
-            goalDailyCalories: this.state.goalDailyCalories,
-            goalDailyProtein: this.state.goalDailyProtein,
-            goalDailyCarbohydrates: this.state.goalDailyCarbohydrates,
-            goalDailyFat: this.state.goalDailyFat,
-            goalDailyActivity: this.state.goalDailyActivity,
+      if(this.checkForNumericValues()) {
+         await fetch(defaultUrl, {
+            method: 'PUT',
+            headers: {
+               'Accept': 'application/json',
+               'Content-Type': 'application/json',
+               'x-access-token': token
+            },
+            body: JSON.stringify({
+               firstName: this.state.firstName,
+               lastName: this.state.lastName,
+               goalDailyCalories: this.state.goalDailyCalories,
+               goalDailyProtein: this.state.goalDailyProtein,
+               goalDailyCarbohydrates: this.state.goalDailyCarbohydrates,
+               goalDailyFat: this.state.goalDailyFat,
+               goalDailyActivity: this.state.goalDailyActivity,
+            })
          })
-      })
-         .then((response) => response.json())
-         .then((responseData) => {
-            console.log(responseData);
-            this.getEditResponse(responseData);
-         })
-         .done();
+            .then((response) => response.json())
+            .then((responseData) => {
+               console.log(responseData);
+               this.getEditResponse(responseData);
+            })
+            .done();
+      }
+
    }
 
    getEditResponse = (responseData) => {
-      let errorString = "(builtins.ValueError)";
       if (responseData == null || responseData.length <= 0) {
          return "";
       } else {
-         if(responseData[Object.keys(responseData)[0]] === "User has been updated!") {
-            alert(responseData[Object.keys(responseData)[0]]);
-         }
-         else if(responseData[Object.keys(responseData)[0]].substring(0, errorString.length) === "(builtins.ValueError)") {
-            alert("Nutrition and fitness inputs can only accept numeric values");
+         if(responseData[Object.keys(responseData)[1]] === "User has been updated!") {
+            alert(responseData[Object.keys(responseData)[1]]);
          }
          else {
             alert("Error while saving");

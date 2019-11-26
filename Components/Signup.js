@@ -4,7 +4,6 @@ import {
    Platform,
    StyleSheet,
    Text,
-   TextInput,
    TouchableWithoutFeedback,
    Keyboard,
    KeyboardAvoidingView
@@ -12,6 +11,7 @@ import {
 import Login from "./Login";
 import { Button} from "react-native-paper";
 import Icon from "react-native-vector-icons/AntDesign";
+import { TextInput } from 'react-native-paper';
 
 
 
@@ -56,7 +56,11 @@ class Signup extends React.Component {
          if(responseData[Object.keys(responseData)[0]] === "User created!") {
             alert(responseData[Object.keys(responseData)[0]]);
             this.props.navigation.navigate('login');
-         } else {
+         }
+         else if(responseData[Object.keys(responseData)[0]] === "Username already taken!") {
+            alert(responseData[Object.keys(responseData)[0]]);
+         }
+         else {
             alert("Error while Signing Up");
          }
       }

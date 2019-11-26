@@ -9,6 +9,12 @@ import Dashboard from "./Components/Dashboard";
 import Fitness from "./Components/Fitness";
 import AddActivity from "./Components/AddActivity";
 import EditActivity from "./Components/EditActivity";
+import Meals from "./Components/Meals";
+import AddMeal from "./Components/AddMeal";
+import EditMeal from "./Components/EditMeal";
+import Foods from "./Components/Foods";
+import AddFood from "./Components/AddFood";
+import EditFood from "./Components/EditFood";
 
 class App extends React.Component {
    constructor(props) {
@@ -34,8 +40,18 @@ const AppDrawerNavigator = createDrawerNavigator({
       screen: Dashboard
    },
    Fitness: {
-      title: 'Fitness Tracker',
-      screen: Fitness
+      screen: Fitness,
+      navigationOptions: () =>
+         ({
+            title: 'Fitness Tracker'
+         })
+   },
+   Meals: {
+      screen: Meals,
+      navigationOptions: () =>
+         ({
+            title: 'Meals Tracker'
+         })
    },
    Profile: {
       title: 'Profile',
@@ -58,6 +74,21 @@ const AppSwitchNavigator = createSwitchNavigator({
    },
    EditActivity: {
       screen: EditActivity
+   },
+   AddMeal: {
+      screen: AddMeal
+   },
+   EditMeal: {
+      screen:EditMeal
+   },
+   Foods: {
+      screen:Foods
+   },
+   AddFood : {
+      screen:AddFood
+   },
+   EditFood : {
+      screen:EditFood
    },
    loggedIn:{screen:AppDrawerNavigator}
 });

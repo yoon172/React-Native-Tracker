@@ -1,22 +1,28 @@
-import * as React from 'react';
-import {Avatar, Button, FAB} from 'react-native-paper';
+import * as React from "react";
 import Header from "./Header";
 import {AsyncStorage, KeyboardAvoidingView, SafeAreaView, ScrollView, StyleSheet, View} from "react-native";
-import ActivityCard from "./ActivityCard";
+import {FAB} from "react-native-paper";
+import MealCard from "./MealCard";
+import FoodsHeader from "./FoodsHeader";
+import FoodCard from "./FoodCard";
 
-class Fitness extends React.Component {
+class Foods extends React.Component {
    constructor(props) {
       super(props);
       this.state = {
          behavior: 'padding',
-         activities : [],
-         token : ''
+         foods: [],
+         token: '',
+         mealName:''
       };
    }
 
-   async deleteActivity(id) {
-      let defaultUrl = 'https://mysqlcs639.cs.wisc.edu/activities/';
-      defaultUrl = defaultUrl + id;
+
+
+   async deleteFood(id) {
+      let defaultUrl = 'https://mysqlcs639.cs.wisc.edu/';
+      let mealId = this.props.navigation.getParam('id', '');
+      defaultUrl = defaultUrl + 'meals/' + mealId + '/foods/' + id;
       await fetch(defaultUrl, {
          method: 'DELETE',
          headers: {
@@ -30,9 +36,8 @@ class Fitness extends React.Component {
             console.log(responseData);
          })
          .done();
-         await this.updateAPI().then();
+      await this.updateAPI().then();
    }
-
 
    getData = async (key) => {
       try {
@@ -53,27 +58,27 @@ class Fitness extends React.Component {
 
    makeCards () {
       let cardArr = [];
-      for (let i = 0; i < this.state.activities.length; i++) {
-         let dateString = this.state.activities[i].date;
-         let T_location = dateString.indexOf('T');
-         let date = dateString.substring(0,T_location);
-         let time = dateString.substring(T_location+1, T_location+8);
-         cardArr.push(<ActivityCard navigation={this.props.navigation} key = {i} id={this.state.activities[i].id} name={this.state.activities[i].name} date={date} duration={this.state.activities[i].duration} calories={this.state.activities[i].calories} deleteActivity = {(data) => this.deleteActivity(data)}/>);
+      for (let i = 0; i < this.state.foods.length; i++) {
+         cardArr.push(<FoodCard navigation={this.props.navigation} key = {i} mealId = {this.props.navigation.getParam('id', '')} foodId={this.state.foods[i].id} name={this.state.foods[i].name}
+                                fat={this.state.foods[i].fat} carbohydrates={this.state.foods[i].carbohydrates} protein = {this.state.foods[i].protein}
+                                calories={this.state.foods[i].calories} deleteFood = {(data) => this.deleteFood(data)}/>);
       }
       return cardArr;
    }
 
    async updateAPI () {
       await this.getData("token");
-      let token = this.state.token;
+      this.setState({mealName:this.props.navigation.getParam('name', '')});
+      let mealId = this.props.navigation.getParam('id', '');
       let defaultUrl = 'https://mysqlcs639.cs.wisc.edu/';
-      defaultUrl = defaultUrl +'activities/';
+      defaultUrl = defaultUrl + 'meals/' + mealId + '/foods/';
+
       await fetch(defaultUrl, {
          method: 'GET',
          headers: {
             'Accept': 'application/json',
             'Content-Type': 'application/json',
-            'x-access-token': token
+            'x-access-token': this.state.token
          },
       })
          .then((response) => response.json())
@@ -81,7 +86,7 @@ class Fitness extends React.Component {
             this.handleObject(responseData);
          })
          .done();
-      }
+   }
 
 
    componentDidMount() {
@@ -98,10 +103,12 @@ class Fitness extends React.Component {
       this.focusListener.remove();
    }
 
+
+
    render () {
       return (
          <>
-            <Header navigation={this.props.navigation} title={"Fitness Tracking"}/>
+            <FoodsHeader navigation={this.props.navigation} title={"Foods in Meal " + (this.state.mealName)}/>
             <KeyboardAvoidingView behavior={this.state.behavior} style={styles.container}>
                <SafeAreaView style={styles.container}>
                   <ScrollView style={styles.scrollView}>
@@ -115,26 +122,16 @@ class Fitness extends React.Component {
                color={"purple"}
                size={50}
                style ={styles.addButton}
-               onPress = {() => this.props.navigation.navigate('AddActivity')}
+               onPress = {() => this.props.navigation.navigate('AddFood',{id : this.props.navigation.getParam('id', ''), name:this.props.name})}
             />
 
-            </>
+         </>
       )
    }
+
 }
 
-
 const styles = StyleSheet.create({
-   title: {
-      fontSize: 20,
-      fontWeight: 'bold',
-      marginTop: 20
-   },
-   subTitle: {
-      fontSize: 17,
-      fontWeight: 'bold',
-      marginBottom: 25
-   },
    container: {
       flex: 1,
       justifyContent: 'center',
@@ -149,4 +146,4 @@ const styles = StyleSheet.create({
    }
 });
 
-export default Fitness;
+export default Foods;
