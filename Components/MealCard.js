@@ -99,7 +99,7 @@ class MealCard extends React.Component {
                      Delete
                   </Button>
                   <Button icon="pencil-outline"  onPress = {() => this.props.navigation.navigate('EditMeal',{navigation: this.props.navigation, id : this.props.id, name:this.props.name, date: this.props.date})}>Edit Meal</Button>
-                  <Button icon="food-apple"  onPress = {() => this.props.navigation.navigate('Foods',{navigation: this.props.navigation, id : this.props.id, name:this.props.name})}>Foods</Button>
+                  <Button icon="food-apple"  onPress = {() => this.props.navigation.navigate('Foods',{navigation: this.props.navigation, id : this.props.id, name:this.props.name})}>Add Foods</Button>
 
                </Card.Actions>
             </Card>

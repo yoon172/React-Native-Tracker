@@ -89,7 +89,7 @@ class Signup extends React.Component {
             </View>
             <View style={{flex:0.7,backgroundColor:'whitesmoke', alignItems:'center', justifyContent:'center'}}>
                <View style={{flexDirection: 'row', justifyContent:'space-evenly'}}>
-                  <Text style={{marginRight: 30, marginTop: 10}}>UserName: </Text>
+                  <Text style={{marginRight: 30, marginTop: 10}}>Username: </Text>
                   <TextInput
                      style={{ height: 40, width:170, borderColor: 'gray', borderWidth: 1}}
                      onChangeText={text => this.handleChanges("username",text)}

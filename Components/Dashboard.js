@@ -2,16 +2,19 @@ import React from "react";
 import {AsyncStorage, KeyboardAvoidingView, SafeAreaView, ScrollView, StyleSheet, Text, View, Dimensions} from "react-native";
 import Header from "./Header";
 import {DataTable, Avatar, Card, Title, Paragraph} from 'react-native-paper';
+import moment from "moment";
+
 import ActivityCard from "./ActivityCard";
+import ActivityChart from "./ActivityChart";
 class Dashboard extends React.Component {
    constructor(props) {
       super(props);
       this.state = {
          behavior: 'padding',
          activities : [],
+         meals:[],
+         mealFood:{},
          token : '',
-         currentPage:0,
-         numPages:2,
          todayDate: '',
          goalDailyActivity: 0,
          goalDailyCalories: 0,
@@ -19,6 +22,7 @@ class Dashboard extends React.Component {
          goalDailyFat: 0,
          goalDailyProtein: 0,
       };
+
    }
 
    getData = async (key) => {
@@ -36,27 +40,78 @@ class Dashboard extends React.Component {
       for (let [key, value] of Object.entries(data)) {
          this.setState({[key]: value});
       }
-      this.makeActivityCells();
    };
+
+
+
+   makeMealsCells () {
+      let cellArr = [];
+      let mealFoodObj = this.state.mealFood;
+      let mealArr = this.state.meals;
+      for (let i = 0; i < mealArr.length; i++) {
+         let dateString = mealArr[i].date;
+         let T_location = dateString.indexOf('T');
+         let date = dateString.substring(0, T_location);
+
+         let currentDate = this.state.todayDate;
+         let actDate = new Date(dateString.substring(0, 4), dateString.substring(5, 7) - 1, dateString.substring(8, 10));
+
+         let curMoment = moment(currentDate);
+         let actMoment = moment(actDate);
+
+         let dateDiff = curMoment.diff(actMoment, 'days');
+
+         if (dateDiff < 7 && curMoment >= actMoment) {
+            let mealFoods = mealFoodObj[mealArr[i].id];
+            if(mealFoods !== undefined) {
+               for(let i = 0; i < mealFoods.length; i++) {
+                  cellArr.push(
+                     <DataTable.Row key={i}>
+                        <DataTable.Cell>{mealFoods[i].name}</DataTable.Cell>
+                        <DataTable.Cell numeric>{mealFoods[i].calories}</DataTable.Cell>
+                        <DataTable.Cell numeric>{mealFoods[i].protein}</DataTable.Cell>
+                        <DataTable.Cell numeric>{mealFoods[i].carbohydrates}</DataTable.Cell>
+                        <DataTable.Cell numeric>{mealFoods[i].fat}</DataTable.Cell>
+                     </DataTable.Row>
+                  );
+            }
+
+            }
+         }
+      }
+      return cellArr;
+   }
+
+
 
    makeActivityCells () {
       let cellArr = [];
       for (let i = 0; i < this.state.activities.length; i++) {
          let dateString = this.state.activities[i].date;
          let T_location = dateString.indexOf('T');
-         let date = dateString.substring(0,T_location);
-         if(date === this.state.todayDate) {
+         let date = dateString.substring(0, T_location);
+
+         let currentDate = this.state.todayDate;
+         let actDate = new Date(dateString.substring(0, 4), dateString.substring(5, 7) - 1, dateString.substring(8, 10));
+
+         let curMoment = moment(currentDate);
+         let actMoment = moment(actDate);
+
+         let dateDiff = curMoment.diff(actMoment, 'days');
+
+         if (dateDiff < 7 && curMoment >= actMoment) {
             cellArr.push(
-            <DataTable.Row key={i}>
-               <DataTable.Cell>{this.state.activities[i].name}</DataTable.Cell>
-               <DataTable.Cell numeric>{date}</DataTable.Cell>
-               <DataTable.Cell numeric>{this.state.activities[i].duration}</DataTable.Cell>
-               <DataTable.Cell numeric>{this.state.activities[i].calories}</DataTable.Cell>
-            </DataTable.Row>
-         );
-      }
+               <DataTable.Row key={i}>
+                  <DataTable.Cell>{this.state.activities[i].name}</DataTable.Cell>
+                  <DataTable.Cell numeric>{date}</DataTable.Cell>
+                  <DataTable.Cell numeric>{this.state.activities[i].duration}</DataTable.Cell>
+                  <DataTable.Cell numeric>{this.state.activities[i].calories}</DataTable.Cell>
+               </DataTable.Row>
+            );
+         }
 
       }
+
       return cellArr;
    }
 
@@ -80,7 +135,6 @@ class Dashboard extends React.Component {
                <Card.Cover source={require('../exercise.jpg')} />
                <View style={{flexDirection:'column'}}>
                   <View style={{alignItems: 'center', justifyContent: 'space-evenly'}}>
-
                   </View>
                   <View style={{alignItems: 'center', justifyContent: 'space-evenly'}}>
                      <Title>Goals</Title>
@@ -102,7 +156,7 @@ class Dashboard extends React.Component {
       await this.getData("token");
       let token = this.state.token;
       let defaultUrl = 'https://mysqlcs639.cs.wisc.edu/';
-      defaultUrl = defaultUrl +'activities/';
+      defaultUrl = defaultUrl + 'activities/';
       await fetch(defaultUrl, {
          method: 'GET',
          headers: {
@@ -114,7 +168,6 @@ class Dashboard extends React.Component {
          .then((response) => response.json())
          .then((responseData) => {
             this.handleObject(responseData);
-            console.log(responseData);
          })
          .done();
 
@@ -135,10 +188,57 @@ class Dashboard extends React.Component {
          .then((response) => response.json())
          .then((responseData) => {
             this.handleObject(responseData);
-         })
-         .done();
-   }
 
+         });
+
+
+      let mealsUrl = 'https://mysqlcs639.cs.wisc.edu/';
+      mealsUrl = mealsUrl + 'meals/';
+
+      await fetch(mealsUrl, {
+         method: 'GET',
+         headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            'x-access-token': token
+         },
+      })
+         .then((response) => response.json())
+         .then((responseData) => {
+            this.handleObject(responseData);
+         });
+
+
+      let mealIds = [];
+      let tempObj = {};
+      let mealsArray = this.state.meals;
+      for (let i = 0; i < mealsArray.length; i++) {
+         mealIds.push(mealsArray[i].id);
+      }
+      for (let i = 0; i < mealIds.length; i++) {
+         let defaultUrl = 'https://mysqlcs639.cs.wisc.edu/';
+         defaultUrl = defaultUrl + 'meals/' + mealIds[i] + '/foods/';
+
+         await fetch(defaultUrl, {
+            method: 'GET',
+            headers: {
+               'Accept': 'application/json',
+               'Content-Type': 'application/json',
+               'x-access-token': this.state.token
+            },
+         })
+            .then((response) => response.json())
+            .then((responseData) => {
+                  let mealId = mealIds[i];
+                  /*let tempObj = JSON.parse(JSON.stringify(this.state.mealFood));*/
+                  tempObj[mealId] = responseData["foods"];
+
+               }
+            )
+      }
+      this.setState({mealFood:tempObj});
+
+   }
 
    componentDidMount() {
       // On mount, do the first update
@@ -150,7 +250,6 @@ class Dashboard extends React.Component {
       let day = new Date().getDate();
       let month = new Date().getMonth() + 1;
       let year = new Date().getFullYear();
-
       this.setState({
          todayDate:
             year + '-' + month + '-' + day
@@ -187,9 +286,8 @@ class Dashboard extends React.Component {
                            {this.makeGoalCells()}
                      </View>
 
-
                         <View style={{flex:1, alignItems:'center', justifyContent:'flex-start'}}>
-                           <Text style={styles.title}>Food Consumed</Text>
+                           <Text style={styles.title}>Food Consumed (7 days)</Text>
                            <DataTable style={{borderWidth:1}}>
                               <DataTable.Header>
                                  <DataTable.Title>Food</DataTable.Title>
@@ -198,33 +296,11 @@ class Dashboard extends React.Component {
                                  <DataTable.Title numeric>Carbs</DataTable.Title>
                                  <DataTable.Title numeric>Fat</DataTable.Title>
                               </DataTable.Header>
-
-                              <DataTable.Row>
-                                 <DataTable.Cell>Hamburger</DataTable.Cell>
-                                 <DataTable.Cell numeric>123</DataTable.Cell>
-                                 <DataTable.Cell numeric>2.0</DataTable.Cell>
-                                 <DataTable.Cell numeric>1.0</DataTable.Cell>
-                                 <DataTable.Cell numeric>3.0</DataTable.Cell>
-                              </DataTable.Row>
-
-                              <DataTable.Row>
-                                 <DataTable.Cell>Smoothie</DataTable.Cell>
-                                 <DataTable.Cell numeric>324</DataTable.Cell>
-                                 <DataTable.Cell numeric>3.0</DataTable.Cell>
-                                 <DataTable.Cell numeric>1.0</DataTable.Cell>
-                                 <DataTable.Cell numeric>2.0</DataTable.Cell>
-                              </DataTable.Row>
-
-                              {/*<DataTable.Pagination
-                                 page={0}
-                                 numberOfPages={0}
-                                 onPageChange={(page) => { this.setState({currentPage:page}); }}
-                                 /*label="1-2 of 6"/>*/}
-
+                              {this.makeMealsCells()}
                            </DataTable>
                         </View>
                      <View style={{flex:1, alignItems:'center', justifyContent:'flex-start'}}>
-                        <Text style={styles.title}>Fitness</Text>
+                        <Text style={styles.title}>Fitness (7 days)</Text>
                         <DataTable style={{borderWidth:1}}>
                            <DataTable.Header>
                               <DataTable.Title>Activity</DataTable.Title>
@@ -235,7 +311,6 @@ class Dashboard extends React.Component {
                            {this.makeActivityCells()}
                         </DataTable>
                      </View>
-
                   </View>
                   </ScrollView>
                </SafeAreaView>

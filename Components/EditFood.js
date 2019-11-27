@@ -188,7 +188,7 @@ class EditFood extends React.Component {
                                        borderColor: 'gray',
                                        borderWidth: 1
                                     }}
-                                    label='Calories'
+                                    label='Calories (kcal)'
                                     keyboardType = 'numeric'
                                     onChangeText={text => this.handleChanges("foodCalories", text)}
                                     value={(this.state.foodCalories).toString()}
@@ -202,7 +202,7 @@ class EditFood extends React.Component {
                                        borderColor: 'gray',
                                        borderWidth: 1
                                     }}
-                                    label='Carbohydrates'
+                                    label='Carbohydrates (g)'
                                     keyboardType = 'numeric'
                                     onChangeText={text => this.handleChanges("foodCarbohydrates", text)}
                                     value={(this.state.foodCarbohydrates).toString()}
@@ -216,10 +216,24 @@ class EditFood extends React.Component {
                                        borderColor: 'gray',
                                        borderWidth: 1
                                     }}
-                                    label='Fat'
+                                    label='Fat (g)'
                                     keyboardType = 'numeric'
                                     onChangeText={text => this.handleChanges("foodFat", text)}
                                     value={(this.state.foodFat).toString()}
+                                 />
+                              </View>
+                              <View style={{flexDirection: 'row', justifyContent: 'space-evenly', marginTop:15}}>
+                                 <TextInput
+                                    style={{
+                                       height: 60,
+                                       width: Dimensions.get('window').width - 20,
+                                       borderColor: 'gray',
+                                       borderWidth: 1
+                                    }}
+                                    label='Protein (g)'
+                                    keyboardType = 'numeric'
+                                    onChangeText={text => this.handleChanges("foodProtein", text)}
+                                    value={(this.state.foodProtein).toString()}
                                  />
                               </View>
                            </View>
@@ -231,7 +245,8 @@ class EditFood extends React.Component {
                               alignItems: 'center',
                               justifyContent: 'space-evenly',
                               width: '100%',
-                              paddingTop: 80
+                              paddingTop: 80,
+                              paddingBottom:20
                            }}>
                               <Button
                                  color={"purple"}
