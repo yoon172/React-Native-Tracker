@@ -200,8 +200,8 @@ class User extends React.Component {
       if (responseData == null || responseData.length <= 0) {
          return "";
       } else {
-         if(responseData[Object.keys(responseData)[1]] === "User has been updated!") {
-            alert(responseData[Object.keys(responseData)[1]]);
+         if(responseData[Object.keys(responseData)[0]] === "User has been updated!") {
+            alert(responseData[Object.keys(responseData)[0]]);
          }
          else {
             alert("Error while saving");
@@ -279,12 +279,9 @@ class User extends React.Component {
                         <TouchableOpacity style={styles.logoutButton} onPress={() => this.logout()}>
                            <Text style={{color:'white', fontWeight:'bold'}}>Logout</Text>
                         </TouchableOpacity>
-                        <Icon
-                           name={"edit"}
-                           color="#add8e6"
-                           size={60}
-                           style={{marginBottom: 25}}
-                        />
+                        <TouchableOpacity style={styles.buttonStyleSave} onPress={() => this.editAttempt()}>
+                           <Text style={{color:'white', fontWeight:'bold'}}>Save Changes</Text>
+                        </TouchableOpacity>
                         <TouchableOpacity style={styles.deleteButton}  onPress={() => this.deleteAccount()}>
                            <Text style={{color:'white', fontWeight:'bold'}}>Delete Account</Text>
                         </TouchableOpacity>
@@ -360,9 +357,7 @@ class User extends React.Component {
                               value={(this.state.goalDailyProtein).toString()}
                            />
                         </View>
-                        <TouchableOpacity style={styles.buttonStyle} onPress={() => this.editAttempt()}>
-                           <Text style={{color:'white', fontWeight:'bold'}}>Edit</Text>
-                        </TouchableOpacity>
+
                      </View>
                   </ScrollView>
                </SafeAreaView>
@@ -388,6 +383,18 @@ const styles = StyleSheet.create({
       alignItems:'center',
       paddingHorizontal: 5,
       marginHorizontal:3
+   },
+   buttonStyleSave: {
+      backgroundColor: '#0800ff',
+      borderRadius: 1,
+      borderWidth: 1,
+      borderColor: '#190fff',
+      height: 40,
+      width: 120,
+      justifyContent: 'center',
+      alignItems: 'center',
+      paddingHorizontal: 5,
+      marginHorizontal: 2
    },
    logoutButton: {
       backgroundColor: '#ff5d00',

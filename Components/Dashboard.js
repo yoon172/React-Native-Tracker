@@ -3,9 +3,8 @@ import {AsyncStorage, KeyboardAvoidingView, SafeAreaView, ScrollView, StyleSheet
 import Header from "./Header";
 import {DataTable, Avatar, Card, Title, Paragraph} from 'react-native-paper';
 import moment from "moment";
-
 import ActivityCard from "./ActivityCard";
-import ActivityChart from "./ActivityChart";
+
 class Dashboard extends React.Component {
    constructor(props) {
       super(props);
@@ -66,7 +65,7 @@ class Dashboard extends React.Component {
             if(mealFoods !== undefined) {
                for(let i = 0; i < mealFoods.length; i++) {
                   cellArr.push(
-                     <DataTable.Row key={i}>
+                     <DataTable.Row>
                         <DataTable.Cell>{mealFoods[i].name}</DataTable.Cell>
                         <DataTable.Cell numeric>{mealFoods[i].calories}</DataTable.Cell>
                         <DataTable.Cell numeric>{mealFoods[i].protein}</DataTable.Cell>
@@ -115,6 +114,17 @@ class Dashboard extends React.Component {
       return cellArr;
    }
 
+   getRandomPicture () {
+      let pictureArr = [
+         require('../exercise.jpg'),
+         require('../exercise2.jpg'),
+         require('../exercise3.jpg'),
+         require('../exercise4.jpg'),
+
+      ];
+      return pictureArr[Math.floor(Math.random()*4)];
+   }
+
    makeGoalCells() {
       let returnArr = [];
       let totalCaloriesBurned = 0;
@@ -128,11 +138,15 @@ class Dashboard extends React.Component {
             totalDuration += this.state.activities[i].duration;
          }
       }
+
+      let randomPicture = this.getRandomPicture();
+
       returnArr.push(
+
          <Card key={1} style={styles.cardStyle}>
             <Card.Title name={"Goal Overview"} left={(props) => <Avatar.Icon {...props} icon="run-fast" />} />
             <Card.Content>
-               <Card.Cover source={require('../exercise.jpg')} />
+               <Card.Cover source={randomPicture} />
                <View style={{flexDirection:'column'}}>
                   <View style={{alignItems: 'center', justifyContent: 'space-evenly'}}>
                   </View>
@@ -153,6 +167,13 @@ class Dashboard extends React.Component {
    }
 
    async updateAPI () {
+      let day = new Date().getDate();
+      let month = new Date().getMonth() + 1;
+      let year = new Date().getFullYear();
+      this.setState({
+         todayDate:
+            year + '-' + month + '-' + day
+      });
       await this.getData("token");
       let token = this.state.token;
       let defaultUrl = 'https://mysqlcs639.cs.wisc.edu/';
@@ -247,13 +268,7 @@ class Dashboard extends React.Component {
       this.focusListener = this.props.navigation.addListener('didFocus', () => {
          this.updateAPI().then();
       });
-      let day = new Date().getDate();
-      let month = new Date().getMonth() + 1;
-      let year = new Date().getFullYear();
-      this.setState({
-         todayDate:
-            year + '-' + month + '-' + day
-      });
+
    }
 
 
