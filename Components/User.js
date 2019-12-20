@@ -4,7 +4,6 @@ import {
    StyleSheet,
    SafeAreaView,
    Text,
-   Button,
    ScrollView,
    KeyboardAvoidingView,
    Dimensions,
@@ -12,15 +11,12 @@ import {
    TouchableOpacity,
    Alert
 } from 'react-native';
-import Icon from "react-native-vector-icons/AntDesign";
 import Header from "./Header";
-import { TextInput } from 'react-native-paper';
+import {TextInput} from 'react-native-paper';
 
 
 class User extends React.Component {
-/*   static navigationOptions = {
-      header: null
-   };*/
+
 
    constructor(props) {
       super(props);
@@ -36,7 +32,7 @@ class User extends React.Component {
          lastName: '',
          username: '',
          token: '',
-         response:''
+         response: ''
       };
 
    }
@@ -47,7 +43,11 @@ class User extends React.Component {
          'Delete Account',
          'Are you sure you want to delete your account?',
          [
-            {text: 'YES', onPress: () => {this.deleteAccountConfirmed().then()}},
+            {
+               text: 'YES', onPress: () => {
+                  this.deleteAccountConfirmed().then()
+               }
+            },
             {text: 'NO', style: 'cancel'},
          ]
       );
@@ -74,7 +74,7 @@ class User extends React.Component {
             this.getDeleteResponse(responseData);
          })
          .done();
-         this.props.navigation.navigate("login");
+      this.props.navigation.navigate("login");
    }
 
    logout() {
@@ -82,14 +82,18 @@ class User extends React.Component {
          'Logout',
          'Would you like to Logout?',
          [
-            {text: 'YES', onPress: () => {this.logoutConfirmed().then()}},
+            {
+               text: 'YES', onPress: () => {
+                  this.logoutConfirmed().then()
+               }
+            },
             {text: 'NO', style: 'cancel'},
          ]
       );
    }
 
 
-   async logoutConfirmed () {
+   async logoutConfirmed() {
       await this.removeData("token");
       await this.removeData("username");
       this.props.navigation.navigate("login");
@@ -98,9 +102,8 @@ class User extends React.Component {
    getData = async (key) => {
       try {
          let data = await AsyncStorage.getItem(key);
-         this.setState({[key]:data});
-      }
-      catch (errorMessage) {
+         this.setState({[key]: data});
+      } catch (errorMessage) {
          console.log(errorMessage);
       }
    };
@@ -108,13 +111,12 @@ class User extends React.Component {
    removeData = async (key) => {
       try {
          await AsyncStorage.removeItem(key);
-      }
-      catch(errorMessage) {
+      } catch (errorMessage) {
          console.log(errorMessage);
       }
    };
 
-   checkForNumericValues () {
+   checkForNumericValues() {
       if (isNaN(this.state.goalDailyActivity)) {
          alert('Activity goal only accepts numerical values');
          return false;
@@ -144,7 +146,7 @@ class User extends React.Component {
       let defaultUrl = 'https://mysqlcs639.cs.wisc.edu/users/';
       defaultUrl = defaultUrl + username;
       if (this.state.goalDailyActivity === '') {
-         this.setState({goalDailyActivity:0}, function(){
+         this.setState({goalDailyActivity: 0}, function () {
             console.log("");
          });
       }
@@ -168,7 +170,7 @@ class User extends React.Component {
             console.log("");
          });
       }
-      if(this.checkForNumericValues()) {
+      if (this.checkForNumericValues()) {
          await fetch(defaultUrl, {
             method: 'PUT',
             headers: {
@@ -200,10 +202,9 @@ class User extends React.Component {
       if (responseData == null || responseData.length <= 0) {
          return "";
       } else {
-         if(responseData[Object.keys(responseData)[0]] === "User has been updated!") {
+         if (responseData[Object.keys(responseData)[0]] === "User has been updated!") {
             alert(responseData[Object.keys(responseData)[0]]);
-         }
-         else {
+         } else {
             alert("Error while saving");
          }
       }
@@ -214,7 +215,7 @@ class User extends React.Component {
       if (responseData == null || responseData <= 0) {
          return "";
       } else {
-         if(responseData[Object.keys(responseData)[0]] === "User has been deleted!") {
+         if (responseData[Object.keys(responseData)[0]] === "User has been deleted!") {
             alert(responseData[Object.keys(responseData)[0]]);
          } else {
             alert("Error while deleting");
@@ -264,26 +265,26 @@ class User extends React.Component {
       return (
 
          <View style={{flex: 1, flexDirection: 'column'}}>
-            <Header navigation={this.props.navigation} title={"Edit Profile"} />
+            <Header navigation={this.props.navigation} title={"Edit Profile"}/>
             <KeyboardAvoidingView behavior={this.state.behavior} style={styles.container}>
                <SafeAreaView style={styles.container}>
                   <ScrollView style={styles.scrollView}>
                      <View style={{
                         flex: 1.2,
-                        flexDirection:"row",
+                        flexDirection: "row",
                         backgroundColor: 'whitesmoke',
                         alignItems: 'center',
                         justifyContent: 'space-around',
                         paddingTop: 5
                      }}>
                         <TouchableOpacity style={styles.logoutButton} onPress={() => this.logout()}>
-                           <Text style={{color:'white', fontWeight:'bold'}}>Logout</Text>
+                           <Text style={{color: 'white', fontWeight: 'bold'}}>Logout</Text>
                         </TouchableOpacity>
                         <TouchableOpacity style={styles.buttonStyleSave} onPress={() => this.editAttempt()}>
-                           <Text style={{color:'white', fontWeight:'bold'}}>Save Changes</Text>
+                           <Text style={{color: 'white', fontWeight: 'bold'}}>Save Changes</Text>
                         </TouchableOpacity>
-                        <TouchableOpacity style={styles.deleteButton}  onPress={() => this.deleteAccount()}>
-                           <Text style={{color:'white', fontWeight:'bold'}}>Delete Account</Text>
+                        <TouchableOpacity style={styles.deleteButton} onPress={() => this.deleteAccount()}>
+                           <Text style={{color: 'white', fontWeight: 'bold'}}>Delete Account</Text>
                         </TouchableOpacity>
                      </View>
                      <View style={{
@@ -294,7 +295,12 @@ class User extends React.Component {
                      }}>
                         <View style={{flexDirection: 'row', justifyContent: 'space-evenly'}}>
                            <TextInput
-                              style={{height: 60, width: Dimensions.get('window').width - 20, borderColor: 'gray', borderWidth: 1}}
+                              style={{
+                                 height: 60,
+                                 width: Dimensions.get('window').width - 20,
+                                 borderColor: 'gray',
+                                 borderWidth: 1
+                              }}
                               label='First Name'
                               onChangeText={text => this.handleChanges("firstName", text)}
                               value={this.state.firstName}
@@ -303,7 +309,12 @@ class User extends React.Component {
 
                         <View style={{flexDirection: 'row', justifyContent: 'space-evenly', marginTop: 30}}>
                            <TextInput
-                              style={{height: 60, width: Dimensions.get('window').width - 20, borderColor: 'gray', borderWidth: 1}}
+                              style={{
+                                 height: 60,
+                                 width: Dimensions.get('window').width - 20,
+                                 borderColor: 'gray',
+                                 borderWidth: 1
+                              }}
                               label='Last Name'
                               onChangeText={text => this.handleChanges("lastName", text)}
                               value={this.state.lastName}
@@ -312,8 +323,13 @@ class User extends React.Component {
 
                         <View style={{flexDirection: 'row', justifyContent: 'space-evenly', marginTop: 30}}>
                            <TextInput
-                              style={{height: 60, width: Dimensions.get('window').width - 20, borderColor: 'gray', borderWidth: 1}}
-                              keyboardType = 'numeric'
+                              style={{
+                                 height: 60,
+                                 width: Dimensions.get('window').width - 20,
+                                 borderColor: 'gray',
+                                 borderWidth: 1
+                              }}
+                              keyboardType='numeric'
                               label='Daily Activity Goal'
                               onChangeText={text => this.handleChanges("goalDailyActivity", text)}
                               value={(this.state.goalDailyActivity).toString()}
@@ -322,8 +338,13 @@ class User extends React.Component {
 
                         <View style={{flexDirection: 'row', justifyContent: 'space-evenly', marginTop: 30}}>
                            <TextInput
-                              style={{height: 60, width: Dimensions.get('window').width - 20, borderColor: 'gray', borderWidth: 1}}
-                              keyboardType = 'numeric'
+                              style={{
+                                 height: 60,
+                                 width: Dimensions.get('window').width - 20,
+                                 borderColor: 'gray',
+                                 borderWidth: 1
+                              }}
+                              keyboardType='numeric'
                               label='Daily Calorie Goal'
                               onChangeText={text => this.handleChanges("goalDailyCalories", text)}
                               value={(this.state.goalDailyCalories).toString()}
@@ -332,8 +353,13 @@ class User extends React.Component {
 
                         <View style={{flexDirection: 'row', justifyContent: 'space-evenly', marginTop: 30}}>
                            <TextInput
-                              style={{height: 60, width: Dimensions.get('window').width - 20, borderColor: 'gray', borderWidth: 1}}
-                              keyboardType = 'numeric'
+                              style={{
+                                 height: 60,
+                                 width: Dimensions.get('window').width - 20,
+                                 borderColor: 'gray',
+                                 borderWidth: 1
+                              }}
+                              keyboardType='numeric'
                               label='Daily Carbohydrate Goal'
                               onChangeText={text => this.handleChanges("goalDailyCarbohydrates", text)}
                               value={(this.state.goalDailyCarbohydrates).toString()}
@@ -341,17 +367,32 @@ class User extends React.Component {
                         </View>
                         <View style={{flexDirection: 'row', justifyContent: 'space-evenly', marginTop: 30}}>
                            <TextInput
-                              style={{height: 60, width: Dimensions.get('window').width - 20, borderColor: 'gray', borderWidth: 1}}
-                              keyboardType = 'numeric'
+                              style={{
+                                 height: 60,
+                                 width: Dimensions.get('window').width - 20,
+                                 borderColor: 'gray',
+                                 borderWidth: 1
+                              }}
+                              keyboardType='numeric'
                               label='Daily Fat Goal'
                               onChangeText={text => this.handleChanges("goalDailyFat", text)}
                               value={(this.state.goalDailyFat).toString()}
                            />
                         </View>
-                        <View style={{flexDirection: 'row', justifyContent: 'space-evenly', marginTop: 30, paddingBottom:10}}>
+                        <View style={{
+                           flexDirection: 'row',
+                           justifyContent: 'space-evenly',
+                           marginTop: 30,
+                           paddingBottom: 10
+                        }}>
                            <TextInput
-                              style={{height: 60, width: Dimensions.get('window').width - 20, borderColor: 'gray', borderWidth: 1}}
-                              keyboardType = 'numeric'
+                              style={{
+                                 height: 60,
+                                 width: Dimensions.get('window').width - 20,
+                                 borderColor: 'gray',
+                                 borderWidth: 1
+                              }}
+                              keyboardType='numeric'
                               label='Daily Protein Goal'
                               onChangeText={text => this.handleChanges("goalDailyProtein", text)}
                               value={(this.state.goalDailyProtein).toString()}
@@ -380,9 +421,9 @@ const styles = StyleSheet.create({
       height: 50,
       width: 100,
       justifyContent: 'center',
-      alignItems:'center',
+      alignItems: 'center',
       paddingHorizontal: 5,
-      marginHorizontal:3
+      marginHorizontal: 3
    },
    buttonStyleSave: {
       backgroundColor: '#0800ff',
@@ -404,10 +445,8 @@ const styles = StyleSheet.create({
       height: 40,
       width: 80,
       justifyContent: 'center',
-      alignItems:'center',
+      alignItems: 'center',
       paddingHorizontal: 5
-/*      marginLeft: 5,
-      marginRight: 5*/
    },
    deleteButton: {
       backgroundColor: '#ff0017',
@@ -417,7 +456,7 @@ const styles = StyleSheet.create({
       height: 40,
       width: 80,
       justifyContent: 'center',
-      alignItems:'center',
+      alignItems: 'center',
       paddingHorizontal: 5
    },
    title: {

@@ -8,7 +8,6 @@ import {
    TouchableWithoutFeedback,
    View
 } from "react-native";
-import SwitchHeader from "./AddFitnessHeader";
 import Icon from "react-native-vector-icons/AntDesign";
 import {Button, TextInput} from "react-native-paper";
 import DateCalendar from "./DateCalendar";
@@ -19,19 +18,18 @@ class EditMeal extends React.Component {
       super(props);
       this.state = {
          behavior: 'padding',
-         token:'',
+         token: '',
          mealName: '',
          mealDate: '',
-         id:''
+         id: ''
       };
    }
 
    getData = async (key) => {
       try {
          let data = await AsyncStorage.getItem(key);
-         this.setState({[key]:data});
-      }
-      catch (errorMessage) {
+         this.setState({[key]: data});
+      } catch (errorMessage) {
          console.log(errorMessage);
       }
    };
@@ -41,16 +39,16 @@ class EditMeal extends React.Component {
       let id = this.props.navigation.getParam('id', '');
       let name = this.props.navigation.getParam('name', '');
       let date = this.props.navigation.getParam('date', '');
-      this.setState({mealName:name, id:id, mealDate:date})
+      this.setState({mealName: name, id: id, mealDate: date})
    }
 
    getEditResponse = (responseData) => {
       if (responseData == null || responseData <= 0) {
          return "";
       } else {
-         if(responseData[Object.keys(responseData)[0]] === "Meal updated!") {
+         if (responseData[Object.keys(responseData)[0]] === "Meal updated!") {
             alert(responseData[Object.keys(responseData)[0]]);
-         }  else {
+         } else {
             alert("Error while Adding");
 
          }
@@ -58,31 +56,31 @@ class EditMeal extends React.Component {
    };
 
    async editActivity() {
-         console.log('name: ' + this.state.mealName);
-         console.log('date: ' + this.state.mealDate);
-         let defaultUrl = 'https://mysqlcs639.cs.wisc.edu/';
-         defaultUrl = defaultUrl + 'meals/' + this.state.id;
-         await fetch(defaultUrl, {
-            method: 'PUT',
-            headers: {
-               'Accept': 'application/json',
-               'Content-Type': 'application/json',
-               'x-access-token': this.state.token
-            },
-            body: JSON.stringify({
-               name: this.state.mealName,
-               date: this.state.mealDate
-            })
+      console.log('name: ' + this.state.mealName);
+      console.log('date: ' + this.state.mealDate);
+      let defaultUrl = 'https://mysqlcs639.cs.wisc.edu/';
+      defaultUrl = defaultUrl + 'meals/' + this.state.id;
+      await fetch(defaultUrl, {
+         method: 'PUT',
+         headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            'x-access-token': this.state.token
+         },
+         body: JSON.stringify({
+            name: this.state.mealName,
+            date: this.state.mealDate
          })
-            .then((response) => response.json())
-            .then((responseData) => {
-               this.getEditResponse(responseData);
-            })
-            .done();
+      })
+         .then((response) => response.json())
+         .then((responseData) => {
+            this.getEditResponse(responseData);
+         })
+         .done();
    }
 
    handleChanges = (value, text) => {
-      this.setState({[value]:text}, function() {
+      this.setState({[value]: text}, function () {
          console.log("");
       });
    };
@@ -140,7 +138,8 @@ class EditMeal extends React.Component {
                               alignItems: 'center',
                               justifyContent: 'center'
                            }}>
-                              <DateCalendar date={this.props.navigation.getParam('date', undefined)} getDate={(data) => this.getDate(data)}/>
+                              <DateCalendar date={this.props.navigation.getParam('date', undefined)}
+                                            getDate={(data) => this.getDate(data)}/>
                            </View>
 
 
@@ -170,23 +169,12 @@ class EditMeal extends React.Component {
                   </KeyboardAvoidingView>
                </TouchableWithoutFeedback>
             </View>
-
-
          </>
       )
    }
 }
-const styles = StyleSheet.create({
-   buttonStyle: {
-      alignSelf: 'stretch',
-      backgroundColor: '#fff',
-      borderRadius: 5,
-      borderWidth: 1,
-      borderColor: '#007aff',
-      marginLeft: 5,
-      marginRight: 5
-   },
 
+const styles = StyleSheet.create({
    container: {
       flex: 1,
       justifyContent: 'center',

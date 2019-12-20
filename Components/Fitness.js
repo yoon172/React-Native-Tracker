@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {Avatar, Button, FAB} from 'react-native-paper';
+import {FAB} from 'react-native-paper';
 import Header from "./Header";
 import {AsyncStorage, KeyboardAvoidingView, SafeAreaView, ScrollView, StyleSheet, View} from "react-native";
 import ActivityCard from "./ActivityCard";
@@ -9,8 +9,8 @@ class Fitness extends React.Component {
       super(props);
       this.state = {
          behavior: 'padding',
-         activities : [],
-         token : ''
+         activities: [],
+         token: ''
       };
    }
 
@@ -30,16 +30,15 @@ class Fitness extends React.Component {
             console.log(responseData);
          })
          .done();
-         await this.updateAPI().then();
+      await this.updateAPI().then();
    }
 
 
    getData = async (key) => {
       try {
          let data = await AsyncStorage.getItem(key);
-         this.setState({[key]:data});
-      }
-      catch (errorMessage) {
+         this.setState({[key]: data});
+      } catch (errorMessage) {
          console.log(errorMessage);
       }
    };
@@ -51,23 +50,27 @@ class Fitness extends React.Component {
       this.makeCards();
    };
 
-   makeCards () {
+   makeCards() {
       let cardArr = [];
       for (let i = 0; i < this.state.activities.length; i++) {
          let dateString = this.state.activities[i].date;
          let T_location = dateString.indexOf('T');
-         let date = dateString.substring(0,T_location);
-         let time = dateString.substring(T_location+1, T_location+8);
-         cardArr.push(<ActivityCard navigation={this.props.navigation} key = {i} id={this.state.activities[i].id} name={this.state.activities[i].name} date={date} duration={this.state.activities[i].duration} calories={this.state.activities[i].calories} deleteActivity = {(data) => this.deleteActivity(data)}/>);
+         let date = dateString.substring(0, T_location);
+         let time = dateString.substring(T_location + 1, T_location + 8);
+         cardArr.push(<ActivityCard navigation={this.props.navigation} key={i} id={this.state.activities[i].id}
+                                    name={this.state.activities[i].name} date={date}
+                                    duration={this.state.activities[i].duration}
+                                    calories={this.state.activities[i].calories}
+                                    deleteActivity={(data) => this.deleteActivity(data)}/>);
       }
       return cardArr;
    }
 
-   async updateAPI () {
+   async updateAPI() {
       await this.getData("token");
       let token = this.state.token;
       let defaultUrl = 'https://mysqlcs639.cs.wisc.edu/';
-      defaultUrl = defaultUrl +'activities/';
+      defaultUrl = defaultUrl + 'activities/';
       await fetch(defaultUrl, {
          method: 'GET',
          headers: {
@@ -81,7 +84,7 @@ class Fitness extends React.Component {
             this.handleObject(responseData);
          })
          .done();
-      }
+   }
 
 
    componentDidMount() {
@@ -98,7 +101,7 @@ class Fitness extends React.Component {
       this.focusListener.remove();
    }
 
-   render () {
+   render() {
       return (
          <>
             <Header navigation={this.props.navigation} title={"Fitness Tracking"}/>
@@ -114,27 +117,17 @@ class Fitness extends React.Component {
                icon="plus"
                color={"purple"}
                size={50}
-               style ={styles.addButton}
-               onPress = {() => this.props.navigation.navigate('AddActivity')}
+               style={styles.addButton}
+               onPress={() => this.props.navigation.navigate('AddActivity')}
             />
 
-            </>
+         </>
       )
    }
 }
 
 
 const styles = StyleSheet.create({
-   title: {
-      fontSize: 20,
-      fontWeight: 'bold',
-      marginTop: 20
-   },
-   subTitle: {
-      fontSize: 17,
-      fontWeight: 'bold',
-      marginBottom: 25
-   },
    container: {
       flex: 1,
       justifyContent: 'center',

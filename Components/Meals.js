@@ -10,8 +10,8 @@ class Meals extends React.Component {
       super(props);
       this.state = {
          behavior: 'padding',
-         meals : [],
-         token : ''
+         meals: [],
+         token: ''
       };
    }
 
@@ -37,9 +37,8 @@ class Meals extends React.Component {
    getData = async (key) => {
       try {
          let data = await AsyncStorage.getItem(key);
-         this.setState({[key]:data});
-      }
-      catch (errorMessage) {
+         this.setState({[key]: data});
+      } catch (errorMessage) {
          console.log(errorMessage);
       }
    };
@@ -51,22 +50,24 @@ class Meals extends React.Component {
       this.makeCards();
    };
 
-   makeCards () {
+   makeCards() {
       let cardArr = [];
       for (let i = 0; i < this.state.meals.length; i++) {
          let dateString = this.state.meals[i].date;
          let T_location = dateString.indexOf('T');
-         let date = dateString.substring(0,T_location);
-         cardArr.push(<MealCard navigation={this.props.navigation} key = {i} id={this.state.meals[i].id} name={this.state.meals[i].name} date={date} deleteMeal = {(data) => this.deleteMeal(data)}/>);
+         let date = dateString.substring(0, T_location);
+         cardArr.push(<MealCard navigation={this.props.navigation} key={i} id={this.state.meals[i].id}
+                                name={this.state.meals[i].name} date={date}
+                                deleteMeal={(data) => this.deleteMeal(data)}/>);
       }
       return cardArr;
    }
 
-   async updateAPI () {
+   async updateAPI() {
       await this.getData("token");
       let token = this.state.token;
       let defaultUrl = 'https://mysqlcs639.cs.wisc.edu/';
-      defaultUrl = defaultUrl +'meals/';
+      defaultUrl = defaultUrl + 'meals/';
       await fetch(defaultUrl, {
          method: 'GET',
          headers: {
@@ -98,7 +99,7 @@ class Meals extends React.Component {
    }
 
 
-   render () {
+   render() {
       return (
          <>
             <Header navigation={this.props.navigation} title={"Meals Tracking"}/>
@@ -114,14 +115,12 @@ class Meals extends React.Component {
                icon="plus"
                color={"purple"}
                size={50}
-               style ={styles.addButton}
-               onPress = {() => this.props.navigation.navigate('AddMeal')}
+               style={styles.addButton}
+               onPress={() => this.props.navigation.navigate('AddMeal')}
             />
-
          </>
       )
    }
-
 }
 
 const styles = StyleSheet.create({

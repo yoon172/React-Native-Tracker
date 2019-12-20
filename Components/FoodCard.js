@@ -5,17 +5,17 @@ import {StyleSheet, View} from "react-native";
 
 class FoodCard extends React.Component {
 
-   delete () {
+   delete() {
       this.props.deleteFood(this.props.foodId).then();
    }
 
-   render () {
-      return(
+   render() {
+      return (
          <>
             <Card style={styles.cardStyle}>
-               <Card.Title name={this.props.name} left={(props) => <Avatar.Icon {...props} icon="food-apple" />} />
+               <Card.Title name={this.props.name} left={(props) => <Avatar.Icon {...props} icon="food-apple"/>}/>
                <Card.Content>
-                  <View style={{flexDirection:'column'}}>
+                  <View style={{flexDirection: 'column'}}>
                      <View style={{alignItems: 'center', justifyContent: 'space-evenly'}}>
                         <Title>{(this.props.name !== undefined ? this.props.name : '')}</Title>
                         <Paragraph>Calories: {this.props.calories}kcal</Paragraph>
@@ -28,13 +28,15 @@ class FoodCard extends React.Component {
                   </View>
                </Card.Content>
                <Card.Actions>
-                  <Button icon="delete" onPress={() =>this.delete()}>
+                  <Button icon="delete" onPress={() => this.delete()}>
                      Delete
                   </Button>
-                  <Button icon="pencil-outline"  onPress = {() => this.props.navigation.navigate('EditFood',{mealId :
-                     this.props.mealId, foodId: this.props.foodId, name:this.props.name,
-                     calories: this.props.calories, carbohydrates:this.props.carbohydrates,
-                     protein: this.props.protein, fat: this.props.fat})}>Edit Food</Button>
+                  <Button icon="pencil-outline" onPress={() => this.props.navigation.navigate('EditFood', {
+                     mealId:
+                     this.props.mealId, foodId: this.props.foodId, name: this.props.name,
+                     calories: this.props.calories, carbohydrates: this.props.carbohydrates,
+                     protein: this.props.protein, fat: this.props.fat
+                  })}>Edit Food</Button>
                </Card.Actions>
             </Card>
          </>
@@ -51,7 +53,7 @@ const styles = StyleSheet.create({
       borderColor: '#ed2aff',
       marginLeft: 5,
       marginRight: 5,
-      marginTop:7
+      marginTop: 7
    }
 
 });

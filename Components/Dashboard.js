@@ -1,19 +1,27 @@
 import React from "react";
-import {AsyncStorage, KeyboardAvoidingView, SafeAreaView, ScrollView, StyleSheet, Text, View, Dimensions} from "react-native";
+import {
+   AsyncStorage,
+   KeyboardAvoidingView,
+   SafeAreaView,
+   ScrollView,
+   StyleSheet,
+   Text,
+   View,
+   Dimensions
+} from "react-native";
 import Header from "./Header";
 import {DataTable, Avatar, Card, Title, Paragraph} from 'react-native-paper';
 import moment from "moment";
-import ActivityCard from "./ActivityCard";
 
 class Dashboard extends React.Component {
    constructor(props) {
       super(props);
       this.state = {
          behavior: 'padding',
-         activities : [],
-         meals:[],
-         mealFood:{},
-         token : '',
+         activities: [],
+         meals: [],
+         mealFood: {},
+         token: '',
          todayDate: '',
          goalDailyActivity: 0,
          goalDailyCalories: 0,
@@ -27,9 +35,8 @@ class Dashboard extends React.Component {
    getData = async (key) => {
       try {
          let data = await AsyncStorage.getItem(key);
-         this.setState({[key]:data});
-      }
-      catch (errorMessage) {
+         this.setState({[key]: data});
+      } catch (errorMessage) {
          console.log(errorMessage);
       }
    };
@@ -42,8 +49,7 @@ class Dashboard extends React.Component {
    };
 
 
-
-   makeMealsCells () {
+   makeMealsCells() {
       let cellArr = [];
       let mealFoodObj = this.state.mealFood;
       let mealArr = this.state.meals;
@@ -62,8 +68,8 @@ class Dashboard extends React.Component {
 
          if (dateDiff < 7 && curMoment >= actMoment) {
             let mealFoods = mealFoodObj[mealArr[i].id];
-            if(mealFoods !== undefined) {
-               for(let i = 0; i < mealFoods.length; i++) {
+            if (mealFoods !== undefined) {
+               for (let i = 0; i < mealFoods.length; i++) {
                   cellArr.push(
                      <DataTable.Row>
                         <DataTable.Cell>{mealFoods[i].name}</DataTable.Cell>
@@ -73,7 +79,7 @@ class Dashboard extends React.Component {
                         <DataTable.Cell numeric>{mealFoods[i].fat}</DataTable.Cell>
                      </DataTable.Row>
                   );
-            }
+               }
 
             }
          }
@@ -82,8 +88,7 @@ class Dashboard extends React.Component {
    }
 
 
-
-   makeActivityCells () {
+   makeActivityCells() {
       let cellArr = [];
       for (let i = 0; i < this.state.activities.length; i++) {
          let dateString = this.state.activities[i].date;
@@ -114,7 +119,7 @@ class Dashboard extends React.Component {
       return cellArr;
    }
 
-   getRandomPicture () {
+   getRandomPicture() {
       let pictureArr = [
          require('../exercise.jpg'),
          require('../exercise2.jpg'),
@@ -122,7 +127,7 @@ class Dashboard extends React.Component {
          require('../exercise4.jpg'),
 
       ];
-      return pictureArr[Math.floor(Math.random()*4)];
+      return pictureArr[Math.floor(Math.random() * 4)];
    }
 
    makeGoalCells() {
@@ -132,8 +137,8 @@ class Dashboard extends React.Component {
       for (let i = 0; i < this.state.activities.length; i++) {
          let dateString = this.state.activities[i].date;
          let T_location = dateString.indexOf('T');
-         let date = dateString.substring(0,T_location);
-         if(date === this.state.todayDate) {
+         let date = dateString.substring(0, T_location);
+         if (date === this.state.todayDate) {
             totalCaloriesBurned += this.state.activities[i].calories;
             totalDuration += this.state.activities[i].duration;
          }
@@ -142,12 +147,11 @@ class Dashboard extends React.Component {
       let randomPicture = this.getRandomPicture();
 
       returnArr.push(
-
          <Card key={1} style={styles.cardStyle}>
-            <Card.Title name={"Goal Overview"} left={(props) => <Avatar.Icon {...props} icon="run-fast" />} />
+            <Card.Title name={"Goal Overview"} left={(props) => <Avatar.Icon {...props} icon="run-fast"/>}/>
             <Card.Content>
-               <Card.Cover source={randomPicture} />
-               <View style={{flexDirection:'column'}}>
+               <Card.Cover source={randomPicture}/>
+               <View style={{flexDirection: 'column'}}>
                   <View style={{alignItems: 'center', justifyContent: 'space-evenly'}}>
                   </View>
                   <View style={{alignItems: 'center', justifyContent: 'space-evenly'}}>
@@ -156,17 +160,18 @@ class Dashboard extends React.Component {
                      <Paragraph>Activity Duration: {totalDuration}</Paragraph>
                      <Paragraph>Activity Goal: {this.state.goalDailyActivity}</Paragraph>
                      <Paragraph>Calorie Goal: {this.state.goalDailyCalories}</Paragraph>
-                     <Paragraph>Calories to go till goal: {this.state.goalDailyCalories - totalCaloriesBurned}</Paragraph>
+                     <Paragraph>Calories to go till
+                        goal: {this.state.goalDailyCalories - totalCaloriesBurned}</Paragraph>
                   </View>
                </View>
             </Card.Content>
          </Card>
       );
 
-   return returnArr;
+      return returnArr;
    }
 
-   async updateAPI () {
+   async updateAPI() {
       let day = new Date().getDate();
       let month = new Date().getMonth() + 1;
       let year = new Date().getFullYear();
@@ -257,7 +262,7 @@ class Dashboard extends React.Component {
                }
             )
       }
-      this.setState({mealFood:tempObj});
+      this.setState({mealFood: tempObj});
 
    }
 
@@ -278,32 +283,36 @@ class Dashboard extends React.Component {
    }
 
 
-
-
-
    render() {
       return (
          <>
 
-            <Header navigation={this.props.navigation} title={"Dashboard"} />
+            <Header navigation={this.props.navigation} title={"Dashboard"}/>
             <KeyboardAvoidingView behavior={this.state.behavior} style={styles.container}>
                <SafeAreaView style={styles.container}>
                   <ScrollView style={styles.scrollView}>
-                  <View style={{backgroundColor:'whitesmoke', flex:1, flexDirection:'column'}}>
-                     <View style={{backgroundColor:'whitesmoke', alignItems:'center', justifyContent:'center',paddingVertical:20, marginTop: 30, marginBottom:20}}>
+                     <View style={{backgroundColor: 'whitesmoke', flex: 1, flexDirection: 'column'}}>
+                        <View style={{
+                           backgroundColor: 'whitesmoke',
+                           alignItems: 'center',
+                           justifyContent: 'center',
+                           paddingVertical: 20,
+                           marginTop: 30,
+                           marginBottom: 20
+                        }}>
 
-                           <Avatar.Icon size={50} icon="account" style={{padding:5}} />
+                           <Avatar.Icon size={50} icon="account" style={{padding: 5}}/>
                            <Text style={styles.subTitle}>{this.state.todayDate}</Text>
 
-                     </View>
-                     <View style={{flex:1, alignItems:'center', justifyContent:'flex-start'}}>
-                        <Text style={styles.title}>Goals Overview</Text>
+                        </View>
+                        <View style={{flex: 1, alignItems: 'center', justifyContent: 'flex-start'}}>
+                           <Text style={styles.title}>Goals Overview</Text>
                            {this.makeGoalCells()}
-                     </View>
+                        </View>
 
-                        <View style={{flex:1, alignItems:'center', justifyContent:'flex-start'}}>
+                        <View style={{flex: 1, alignItems: 'center', justifyContent: 'flex-start'}}>
                            <Text style={styles.title}>Food Consumed (7 days)</Text>
-                           <DataTable style={{borderWidth:1}}>
+                           <DataTable style={{borderWidth: 1}}>
                               <DataTable.Header>
                                  <DataTable.Title>Food</DataTable.Title>
                                  <DataTable.Title numeric>Calories</DataTable.Title>
@@ -314,28 +323,26 @@ class Dashboard extends React.Component {
                               {this.makeMealsCells()}
                            </DataTable>
                         </View>
-                     <View style={{flex:1, alignItems:'center', justifyContent:'flex-start'}}>
-                        <Text style={styles.title}>Fitness (7 days)</Text>
-                        <DataTable style={{borderWidth:1}}>
-                           <DataTable.Header>
-                              <DataTable.Title>Activity</DataTable.Title>
-                              <DataTable.Title numeric>Date</DataTable.Title>
-                              <DataTable.Title numeric>Duration</DataTable.Title>
-                              <DataTable.Title numeric>Calories</DataTable.Title>
-                           </DataTable.Header>
-                           {this.makeActivityCells()}
-                        </DataTable>
+                        <View style={{flex: 1, alignItems: 'center', justifyContent: 'flex-start'}}>
+                           <Text style={styles.title}>Fitness (7 days)</Text>
+                           <DataTable style={{borderWidth: 1}}>
+                              <DataTable.Header>
+                                 <DataTable.Title>Activity</DataTable.Title>
+                                 <DataTable.Title numeric>Date</DataTable.Title>
+                                 <DataTable.Title numeric>Duration</DataTable.Title>
+                                 <DataTable.Title numeric>Calories</DataTable.Title>
+                              </DataTable.Header>
+                              {this.makeActivityCells()}
+                           </DataTable>
+                        </View>
                      </View>
-                  </View>
                   </ScrollView>
                </SafeAreaView>
             </KeyboardAvoidingView>
 
 
-
-
          </>
-         );
+      );
    }
 }
 
@@ -344,24 +351,18 @@ const styles = StyleSheet.create({
       fontSize: 20,
       fontWeight: 'bold',
       marginTop: 10,
-      marginBottom:10
+      marginBottom: 10
    },
    subTitle: {
       fontSize: 17,
       fontWeight: 'bold',
-      paddingTop:15
+      paddingTop: 15
    },
    container: {
       flex: 1,
       justifyContent: 'center',
       paddingHorizontal: 0,
       paddingTop: 0,
-   },
-   addButton: {
-      alignSelf: 'flex-end',
-      position: 'absolute',
-      bottom: 35,
-      right: 15
    },
    cardStyle: {
       backgroundColor: '#fff',
@@ -370,7 +371,7 @@ const styles = StyleSheet.create({
       borderColor: '#ed2aff',
       marginLeft: 5,
       marginRight: 5,
-      marginTop:7,
+      marginTop: 7,
       width: Dimensions.get('window').width - 10
    }
 });

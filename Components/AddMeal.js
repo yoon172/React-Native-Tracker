@@ -1,16 +1,14 @@
 import * as React from "react";
-import SwitchHeader from "./AddFitnessHeader";
 import {
    AsyncStorage,
    Dimensions,
    Keyboard,
    KeyboardAvoidingView,
    SafeAreaView,
-   ScrollView, StyleSheet, Text,
+   ScrollView, StyleSheet,
    TouchableWithoutFeedback,
    View
 } from "react-native";
-/*import Icon from "react-native-vector-icons/Icon";*/
 import {Button, TextInput} from "react-native-paper";
 import DateCalendar from "./DateCalendar";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
@@ -175,16 +173,6 @@ class AddMeal extends React.Component {
 }
 
 const styles = StyleSheet.create({
-   buttonStyle: {
-      alignSelf: 'stretch',
-      backgroundColor: '#fff',
-      borderRadius: 5,
-      borderWidth: 1,
-      borderColor: '#007aff',
-      marginLeft: 5,
-      marginRight: 5
-   },
-
    container: {
       flex: 1,
       justifyContent: 'center',

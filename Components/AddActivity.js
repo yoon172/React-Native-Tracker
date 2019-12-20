@@ -211,26 +211,6 @@ class AddActivity extends React.Component {
 }
 
 const styles = StyleSheet.create({
-   buttonStyle: {
-      flex: 1,
-      alignSelf: 'stretch',
-      backgroundColor: '#fff',
-      borderRadius: 5,
-      borderWidth: 1,
-      borderColor: '#007aff',
-      marginLeft: 5,
-      marginRight: 5
-   },
-   title: {
-      fontSize: 20,
-      fontWeight: 'bold',
-      marginTop: 20
-   },
-   subTitle: {
-      fontSize: 17,
-      fontWeight: 'bold',
-      marginBottom: 25
-   },
    container: {
       flex: 1,
       justifyContent: 'center',

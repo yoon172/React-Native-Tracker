@@ -8,7 +8,6 @@ import {
    TouchableWithoutFeedback,
    View
 } from "react-native";
-import SwitchHeader from "./AddFitnessHeader";
 import {Button, TextInput} from "react-native-paper";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 import FoodsEditHeader from "./FoodsEditHeader";
@@ -20,14 +19,14 @@ class AddFood extends React.Component {
          behavior: 'padding',
          foodName: '',
          foodCalories: '',
-         foodProtein:'',
-         foodCarbohydrates:'',
-         foodFat:'',
+         foodProtein: '',
+         foodCarbohydrates: '',
+         foodFat: '',
          token: '',
       };
    }
 
-   checkForNumericValues () {
+   checkForNumericValues() {
 
       if (isNaN(this.state.foodCalories)) {
          alert('Calories only accepts numerical values');
@@ -89,7 +88,7 @@ class AddFood extends React.Component {
       defaultUrl = defaultUrl + 'meals/' + mealId + '/foods/';
 
       if (this.state.foodCalories === '') {
-         this.setState({foodCalories:0}, function(){
+         this.setState({foodCalories: 0}, function () {
             console.log("");
          });
       }
@@ -108,7 +107,7 @@ class AddFood extends React.Component {
             console.log("");
          });
       }
-      if(this.checkForNumericValues()) {
+      if (this.checkForNumericValues()) {
          await fetch(defaultUrl, {
             method: 'POST',
             headers: {
@@ -119,9 +118,9 @@ class AddFood extends React.Component {
             body: JSON.stringify({
                name: this.state.foodName,
                calories: this.state.foodCalories,
-               protein:this.state.foodProtein,
-               carbohydrates:this.state.foodCarbohydrates,
-               fat:this.state.foodFat
+               protein: this.state.foodProtein,
+               carbohydrates: this.state.foodCarbohydrates,
+               fat: this.state.foodFat
             })
          })
             .then((response) => response.json())
@@ -135,7 +134,7 @@ class AddFood extends React.Component {
    render() {
       return (
          <>
-            <FoodsEditHeader navigation={this.props.navigation} mealId ={this.props.navigation.getParam('id', '')}
+            <FoodsEditHeader navigation={this.props.navigation} mealId={this.props.navigation.getParam('id', '')}
                              title={"Add Food"}/>
             <View style={{flex: 1, flexDirection: 'column', backgroundColor: 'white'}}>
                <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
@@ -161,7 +160,7 @@ class AddFood extends React.Component {
                               justifyContent: 'center',
                               paddingTop: 40
                            }}>
-                              <View style={{flexDirection: 'row', justifyContent: 'space-evenly', marginTop:15}}>
+                              <View style={{flexDirection: 'row', justifyContent: 'space-evenly', marginTop: 15}}>
                                  <TextInput
                                     style={{
                                        height: 60,
@@ -174,7 +173,7 @@ class AddFood extends React.Component {
                                     value={this.state.foodName}
                                  />
                               </View>
-                              <View style={{flexDirection: 'row', justifyContent: 'space-evenly', marginTop:15}}>
+                              <View style={{flexDirection: 'row', justifyContent: 'space-evenly', marginTop: 15}}>
                                  <TextInput
                                     style={{
                                        height: 60,
@@ -183,12 +182,12 @@ class AddFood extends React.Component {
                                        borderWidth: 1
                                     }}
                                     label='Calories (kcal)'
-                                    keyboardType = 'numeric'
+                                    keyboardType='numeric'
                                     onChangeText={text => this.handleChanges("foodCalories", text)}
                                     value={(this.state.foodCalories).toString()}
                                  />
                               </View>
-                              <View style={{flexDirection: 'row', justifyContent: 'space-evenly', marginTop:15}}>
+                              <View style={{flexDirection: 'row', justifyContent: 'space-evenly', marginTop: 15}}>
                                  <TextInput
                                     style={{
                                        height: 60,
@@ -197,12 +196,12 @@ class AddFood extends React.Component {
                                        borderWidth: 1
                                     }}
                                     label='Carbohydrates (g)'
-                                    keyboardType = 'numeric'
+                                    keyboardType='numeric'
                                     onChangeText={text => this.handleChanges("foodCarbohydrates", text)}
                                     value={(this.state.foodCarbohydrates).toString()}
                                  />
                               </View>
-                              <View style={{flexDirection: 'row', justifyContent: 'space-evenly', marginTop:15}}>
+                              <View style={{flexDirection: 'row', justifyContent: 'space-evenly', marginTop: 15}}>
                                  <TextInput
                                     style={{
                                        height: 60,
@@ -211,12 +210,12 @@ class AddFood extends React.Component {
                                        borderWidth: 1
                                     }}
                                     label='Fat (g)'
-                                    keyboardType = 'numeric'
+                                    keyboardType='numeric'
                                     onChangeText={text => this.handleChanges("foodFat", text)}
                                     value={(this.state.foodFat).toString()}
                                  />
                               </View>
-                              <View style={{flexDirection: 'row', justifyContent: 'space-evenly', marginTop:15}}>
+                              <View style={{flexDirection: 'row', justifyContent: 'space-evenly', marginTop: 15}}>
                                  <TextInput
                                     style={{
                                        height: 60,
@@ -225,7 +224,7 @@ class AddFood extends React.Component {
                                        borderWidth: 1
                                     }}
                                     label='Protein (g)'
-                                    keyboardType = 'numeric'
+                                    keyboardType='numeric'
                                     onChangeText={text => this.handleChanges("foodProtein", text)}
                                     value={(this.state.foodProtein).toString()}
                                  />
@@ -240,7 +239,7 @@ class AddFood extends React.Component {
                               justifyContent: 'space-evenly',
                               width: '100%',
                               paddingTop: 80,
-                              paddingBottom:20
+                              paddingBottom: 20
                            }}>
                               <Button
                                  color={"purple"}
@@ -252,7 +251,7 @@ class AddFood extends React.Component {
                                  color={"purple"}
                                  mode="contained"
                                  size={50}
-                                 onPress={() => this.props.navigation.navigate('Foods',{id : this.props.navigation.getParam('id', '')})}
+                                 onPress={() => this.props.navigation.navigate('Foods', {id: this.props.navigation.getParam('id', '')})}
                               >Go Back</Button>
                            </View>
                         </ScrollView>

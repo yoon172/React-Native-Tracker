@@ -1,8 +1,6 @@
 import * as React from "react";
-import Header from "./Header";
 import {AsyncStorage, KeyboardAvoidingView, SafeAreaView, ScrollView, StyleSheet, View} from "react-native";
 import {FAB} from "react-native-paper";
-import MealCard from "./MealCard";
 import FoodsHeader from "./FoodsHeader";
 import FoodCard from "./FoodCard";
 
@@ -13,10 +11,9 @@ class Foods extends React.Component {
          behavior: 'padding',
          foods: [],
          token: '',
-         mealName:''
+         mealName: ''
       };
    }
-
 
 
    async deleteFood(id) {
@@ -42,9 +39,8 @@ class Foods extends React.Component {
    getData = async (key) => {
       try {
          let data = await AsyncStorage.getItem(key);
-         this.setState({[key]:data});
-      }
-      catch (errorMessage) {
+         this.setState({[key]: data});
+      } catch (errorMessage) {
          console.log(errorMessage);
       }
    };
@@ -56,19 +52,22 @@ class Foods extends React.Component {
       this.makeCards();
    };
 
-   makeCards () {
+   makeCards() {
       let cardArr = [];
       for (let i = 0; i < this.state.foods.length; i++) {
-         cardArr.push(<FoodCard navigation={this.props.navigation} key = {i} mealId = {this.props.navigation.getParam('id', '')} foodId={this.state.foods[i].id} name={this.state.foods[i].name}
-                                fat={this.state.foods[i].fat} carbohydrates={this.state.foods[i].carbohydrates} protein = {this.state.foods[i].protein}
-                                calories={this.state.foods[i].calories} deleteFood = {(data) => this.deleteFood(data)}/>);
+         cardArr.push(<FoodCard navigation={this.props.navigation} key={i}
+                                mealId={this.props.navigation.getParam('id', '')} foodId={this.state.foods[i].id}
+                                name={this.state.foods[i].name}
+                                fat={this.state.foods[i].fat} carbohydrates={this.state.foods[i].carbohydrates}
+                                protein={this.state.foods[i].protein}
+                                calories={this.state.foods[i].calories} deleteFood={(data) => this.deleteFood(data)}/>);
       }
       return cardArr;
    }
 
-   async updateAPI () {
+   async updateAPI() {
       await this.getData("token");
-      this.setState({mealName:this.props.navigation.getParam('name', '')});
+      this.setState({mealName: this.props.navigation.getParam('name', '')});
       let mealId = this.props.navigation.getParam('id', '');
       let defaultUrl = 'https://mysqlcs639.cs.wisc.edu/';
       defaultUrl = defaultUrl + 'meals/' + mealId + '/foods/';
@@ -104,8 +103,7 @@ class Foods extends React.Component {
    }
 
 
-
-   render () {
+   render() {
       return (
          <>
             <FoodsHeader navigation={this.props.navigation} title={"Foods in Meal " + (this.state.mealName)}/>
@@ -121,8 +119,11 @@ class Foods extends React.Component {
                icon="plus"
                color={"purple"}
                size={50}
-               style ={styles.addButton}
-               onPress = {() => this.props.navigation.navigate('AddFood',{id : this.props.navigation.getParam('id', ''), name:this.props.name})}
+               style={styles.addButton}
+               onPress={() => this.props.navigation.navigate('AddFood', {
+                  id: this.props.navigation.getParam('id', ''),
+                  name: this.props.name
+               })}
             />
 
          </>

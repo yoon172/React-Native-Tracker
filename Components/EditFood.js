@@ -8,10 +8,8 @@ import {
    TouchableWithoutFeedback,
    View
 } from "react-native";
-import SwitchHeader from "./AddFitnessHeader";
 import {Button, TextInput} from "react-native-paper";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
-import FoodsHeader from "./FoodsHeader";
 import FoodsEditHeader from "./FoodsEditHeader";
 
 class EditFood extends React.Component {
@@ -266,24 +264,12 @@ class EditFood extends React.Component {
                   </KeyboardAvoidingView>
                </TouchableWithoutFeedback>
             </View>
-
-
          </>
       )
    }
 }
 
 const styles = StyleSheet.create({
-   buttonStyle: {
-      alignSelf: 'stretch',
-      backgroundColor: '#fff',
-      borderRadius: 5,
-      borderWidth: 1,
-      borderColor: '#007aff',
-      marginLeft: 5,
-      marginRight: 5
-   },
-
    container: {
       flex: 1,
       justifyContent: 'center',
